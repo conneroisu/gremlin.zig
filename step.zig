@@ -47,12 +47,12 @@ pub fn create(
     return step;
 }
 
-fn make(step: *std.Build.Step, _: std.Build.Step.MakeOptions) !void {
+fn make(step: *std.Build.Step, _: std.Progress.Node) !void {
     const b = step.owner;
     const ps: *ProtoGenStep = @fieldParentPtr("step", step);
 
-    const proto_path = try ps.proto_sources.getPath3(b, step).toString(b.allocator);
-    const target_path = try ps.gen_output.getPath3(b, step).toString(b.allocator);
+    const proto_path = ps.proto_sources.getPath2(b, step);
+    const target_path = ps.gen_output.getPath2(b, step);
     const build_path = b.build_root.path orelse @panic("build path unknown");
 
     const proto_path_resolved = try std.Build.Cache.Directory.cwd().handle.realpathAlloc(b.allocator, proto_path);
